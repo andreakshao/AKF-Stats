@@ -2,11 +2,11 @@ from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 #import json
 
-api_key = 'RGAPI-your key here'
+api_key = 'RGAPI-fe1de2e8-a919-470a-a7c8-6c86a3f2d74c'
 watcher = LolWatcher(api_key)
 region = 'na1'
 
-player = watcher.summoner.by_name(region, 'RozeZeal')
+player = watcher.summoner.by_name(region, 'jankykf')
 #use jankykf for flex and solo stats, ashaowowow for none, and RozeZeal for just solo
 print (player)
 player_name = player ['name']
@@ -36,8 +36,6 @@ except ValueError:
             player_flex_lp = int (player_flex_stats [0]['leaguePoints'])
             print (player_flex_rank, player_flex_rank_num, player_flex_wins, player_flex_losses, player_flex_lp)
 
-        else:
-            print ('filler, shouldnt ever get here')
     except IndexError:
         print('no ranked stats')
 else: 
@@ -58,5 +56,12 @@ else:
 
 
     print(player_solo_stats, player_flex_stats)
+
+player_matches = watcher.match.matchlist_by_account(region, player['accountId'])
+last_match = player_matches['matches'][0]
+match_detail = watcher.match.by_id(region, last_match['gameId'])
+print(match_detail)
+# start a for loop from here analizing the players stats for each game for trends like killstealing, not warding, etc...
+# can write functions to check for each trait 
 
 
