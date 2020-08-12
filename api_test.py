@@ -2,11 +2,12 @@ from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 #import json
 
-api_key = 'RGAPI-fe1de2e8-a919-470a-a7c8-6c86a3f2d74c'
+api_key = 'RGAPI-92c441b3-05ff-46ed-81b1-0e387471050c'
 watcher = LolWatcher(api_key)
 region = 'na1'
 
-player = watcher.summoner.by_name(region, 'jankykf')
+playerid = 'jankykf'
+player = watcher.summoner.by_name(region, playerid)
 #use jankykf for flex and solo stats, ashaowowow for none, and RozeZeal for just solo
 print (player)
 player_name = player ['name']
@@ -58,9 +59,18 @@ else:
     print(player_solo_stats, player_flex_stats)
 
 player_matches = watcher.match.matchlist_by_account(region, player['accountId'])
-last_match = player_matches['matches'][0]
+last_match = player_matches['matches'][16]
 match_detail = watcher.match.by_id(region, last_match['gameId'])
 print(match_detail)
+if (match_detail['queueId'] == 430 or 420 or 400 or 440):
+    for row in match_detail['participantIdentities']:
+        if (row['player']['summonerName'] == playerid):
+            for participant in match_detail['participants']:
+                if (participant['participantId'] == row['participantId']):
+                    print (participant)
+                    stats = participant ['stats']
+        
+    
 # start a for loop from here analizing the players stats for each game for trends like killstealing, not warding, etc...
 # can write functions to check for each trait 
 
