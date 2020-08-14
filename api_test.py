@@ -2,7 +2,7 @@ from riotwatcher import LolWatcher, ApiError
 import pandas as pd
 #import json
 
-api_key = 'RGAPI-92c441b3-05ff-46ed-81b1-0e387471050c'
+api_key = 'RGAPI-6fe5f817-190c-4e56-ab26-ff109a4315ff'
 watcher = LolWatcher(api_key)
 region = 'na1'
 
@@ -59,19 +59,23 @@ else:
     print(player_solo_stats, player_flex_stats)
 
 player_matches = watcher.match.matchlist_by_account(region, player['accountId'])
-last_match = player_matches['matches'][16]
-match_detail = watcher.match.by_id(region, last_match['gameId'])
-print(match_detail)
-if (match_detail['queueId'] == 430 or 420 or 400 or 440):
-    for row in match_detail['participantIdentities']:
-        if (row['player']['summonerName'] == playerid):
-            for participant in match_detail['participants']:
-                if (participant['participantId'] == row['participantId']):
-                    print (participant)
-                    stats = participant ['stats']
+normal_games = 0
+counter = 0
+while normal_games < 20:
+    last_match = player_matches['matches'][counter]
+    match_detail = watcher.match.by_id(region, last_match['gameId'])
+    counter += 1
+    #print(match_detail)
+    if (match_detail['queueId'] == 430 or 420 or 400 or 440):
+        normal_games += 1
+        for row in match_detail['participantIdentities']:
+            if (row['player']['summonerName'] == playerid):
+                for participant in match_detail['participants']:
+                    if (participant['participantId'] == row['participantId']):
+                        print (participant['participantId'])
+                        stats = participant ['stats']
         
-    
-# start a for loop from here analizing the players stats for each game for trends like killstealing, not warding, etc...
-# can write functions to check for each trait 
+                        # start analizing the players stats for each game for trends like killstealing, not warding, etc...
+                        # can write functions to check for each trait 
 
 
